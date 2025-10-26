@@ -1,0 +1,25 @@
+{
+  "id": "com.gemini.code.autocomplete",
+  "name": "Gemini Code Autocomplete",
+  "version": "1.1.0",
+  "author": "AI Assistant",
+  "description": "Provides real-time, AI-powered code autocompletions using Google's Gemini API. This plugin uses the official Acode Plugin SDK.",
+  "main": "main.js",
+  "files": [
+    "js",
+    "jsx",
+    "ts",
+    "tsx",
+    "html",
+    "css"
+  ],
+  "settings": [
+    {
+      "key": "geminiApiKey",
+      "type": "text",
+      "text": "Gemini API Key",
+      "required": true,
+      "placeholder": "Enter your Google Gemini API key"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "name": "Gemini Code Autocomplete",
+  "description": "A powerful and real-time code autocomplete tool powered by Google's Gemini AI. Type your code and get intelligent suggestions instantly, similar to modern IDE extensions.",
+  "requestFramePermissions": []
+}
