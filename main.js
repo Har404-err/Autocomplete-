@@ -162,27 +162,31 @@ class GeminiAutocompletePlugin {
         // Clean up the language name (e.g., 'ace/mode/javascript' -> 'javascript')
         const langName = language.split('/').pop();
 
-        const systemInstruction = `You are an expert code completion AI assistant integrated into a code editor.
-A user is typing code in a ${langName} file and needs an autocomplete suggestion.
-Your task is to complete the following code snippet.
-Guidelines:
-- Provide ONLY the new code that should be appended at the user's cursor.
-- Do NOT repeat any of the user's existing code from the snippet.
-- Do NOT add any explanations, comments, or markdown formatting (like \`\`\`).
-- The completion should be concise, relevant, and syntactically correct.
-- Preserve indentation and formatting based on the context.`;
-    
-        const contents = `Code context (everything in the file before the user's cursor):
----
-${codeSnippet}
----
-Your code completion:`;
+        const prompt = `
+          You are an expert code completion AI assistant integrated into a code editor.
+          A user is typing code in a ${langName} file and needs an autocomplete suggestion.
+          Your task is to complete the following code snippet.
+          
+          Guidelines:
+          - Provide ONLY the new code that should be appended at the user's cursor.
+          - Do NOT repeat any of the user's existing code from the snippet.
+          - Do NOT add any explanations, comments, or markdown formatting (like \`\`\`).
+          - The completion should be concise, relevant, and syntactically correct.
+          - Preserve indentation and formatting based on the context.
+          - You can provide multi-line suggestions if it makes sense (e.g., completing a function body, a CSS rule, or an HTML tag).
 
+          Code context (everything in the file before the user's cursor):
+          ---
+          ${codeSnippet}
+          ---
+
+          Your code completion:
+        `;
+        
         const response = await this.#ai.models.generateContent({
             model: 'gemini-2.5-flash',
-            contents: contents,
+            contents: prompt,
             config: {
-                systemInstruction: systemInstruction,
                 temperature: 0.2,
                 maxOutputTokens: 256,
                 topP: 0.9,
@@ -192,8 +196,6 @@ Your code completion:`;
 
         if (signal.aborted) return '';
         
-        // The .text property is the recommended way to access the generated text.
-        // Fallback to empty string if it's not present.
         const text = response.text;
         return text || '';
     }
